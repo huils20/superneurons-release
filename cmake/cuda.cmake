@@ -26,8 +26,8 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 1)   # fix macosx rpath warning
 else ()
     message("Platform is Linux")
-    include_directories("${CUDNN_ROOT_DIR}/include")
-    set(CUDNN_LIBRARIES "${CUDNN_ROOT_DIR}/lib64/libcudnn.so")
+    include_directories("/usr/lib/x86_64-linux-gnu/")
+    set(CUDNN_LIBRARIES "/usr/lib/x86_64-linux-gnu/libcudnn.so.8")
 endif (APPLE)
 
 # end of finding cuda and cudnn

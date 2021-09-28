@@ -10,7 +10,7 @@ include_directories(${GLOG_ROOT}/include)
 if (APPLE)
     set(GLOG_LIBRARIES ${GLOG_ROOT}/lib/libglog.dylib)
 else()
-    set(GLOG_LIBRARIES ${GLOG_ROOT}/lib/libglog.so)
+    set(GLOG_LIBRARIES ${GLOG_ROOT}/libglog.so.1)
 endif ()
 
 list(APPEND THIRD_LIBS ${GLOG_LIBRARIES})
