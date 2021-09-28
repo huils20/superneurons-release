@@ -1,4 +1,4 @@
-CUDA_ROOT_DIR=/usr/local/cuda-11.0
+CUDA_ROOT_DIR=/usr/local/cuda
 #CUDNN_ROOT_DIR=/data/lwang53/lib/cuDNN7.0
 #直接在cuda.cmake定义了关于cudnn的路径
 
