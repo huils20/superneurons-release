@@ -27,7 +27,7 @@ if (APPLE)
 else ()
     message("Platform is Linux")
     include_directories("/usr/lib/x86_64-linux-gnu/")
-    set(CUDNN_LIBRARIES "/usr/lib/x86_64-linux-gnu/libcudnn.so.8")
+    set(CUDNN_LIBRARIES "/usr/lib/x86_64-linux-gnu/libcudnn.so.7.6.5")
 endif (APPLE)
 
 # end of finding cuda and cudnn
