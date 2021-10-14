@@ -11,11 +11,11 @@ int main(int argc, char **argv) {
     char* test_image_bin;
     char* train_mean_file;
 
-    train_mean_file = (char *) "/data/lwang53/dataset/cifar/cifar_train.mean";
-    train_image_bin = (char *) "/data/lwang53/dataset/cifar/cifar10_train_image_0.bin";
-    train_label_bin = (char *) "/data/lwang53/dataset/cifar/cifar10_train_label_0.bin";
-    test_image_bin  = (char *) "/data/lwang53/dataset/cifar/cifar10_test_image_0.bin";
-    test_label_bin  = (char *) "/data/lwang53/dataset/cifar/cifar10_test_label_0.bin";
+    train_mean_file = (char *) "/content/data3/cifar_train.mean";
+    train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
+    train_label_bin = (char *) "/content/data3/cifar10_train_label_0.bin";
+    test_image_bin  = (char *) "/content/data3/cifar10_test_image_0.bin";
+    test_label_bin  = (char *) "/content/data3/cifar10_test_label_0.bin";
 
     const size_t batch_size = 256; //train and test must be same
     const size_t C = 3, H = 32, W = 32;
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     n.setup_test( data_2, 100 );
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs/batch_size;
-    n.train(20000, tracking_window, 1000);
+    n.train(20, tracking_window, 100);
 
     delete reader1;
     delete reader2;
