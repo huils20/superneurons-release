@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-
+project(superneurons-release)
 ##########################################################
 # set the version number
 set(superneurons_VERSION_MAJOR 0)
