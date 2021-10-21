@@ -75,7 +75,3 @@ pack2() {
 pack1 false false	# no
 pack1 false true		# recompute
 pack1 true true		# prefetch and recompute
-
-pack2 false false	# no
-pack2 false true		# recompute
-pack2 true true		# prefetch and recompute

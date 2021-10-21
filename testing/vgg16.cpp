@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
     char *test_label_bin;
     char *test_image_bin;
 //    char *checkpoint;
-
+//数据集地址与数据尺寸
 //    train_mean_file = (char *) "/home/ay27/dataset/bin_file/imgnet_train.mean";
     train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
     train_label_bin = (char *) "/content/data3/cifar10_train_label_0.bin";
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
 
     const size_t batch_size = static_cast<const size_t>(atoi(argv[1])); //train and test must be same
-    const size_t C = 3, H = 227, W = 227;
+    const size_t C = 3, H = 277, W = 277;
 
 
     base_preprocess_t<float> *flip = (base_preprocess_t<float> *) new random_flip_left_right_t<float>(
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
                     batch_size, C, H, W);
 
     float channel_mean[3] = {103.939, 116.779, 123.68};
-
+    //float channel_mean[3] = {125.306915, 122.950394, 113.865349};//cifar10
     base_preprocess_t<float> *mean_sub =
             (base_preprocess_t<float> *) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
 
@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
     n.bsetup(softmax);
 
     // test set #50000 imgs
-    n.setup_test(data_2, 10000 / batch_size);
+    n.setup_test(data_2, 50000 / batch_size);
 
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs / batch_size;
@@ -233,10 +233,10 @@ int main(int argc, char **argv) {
     // 10 epoch
     // testing every epoch
     printf("total iteration: %zu, test interval : %zu\n", (train_imgs/batch_size)*10, train_imgs/batch_size);
-//    n.train((train_imgs/batch_size)*100, tracking_window, tracking_window);
+//    n.train((train_imgs/batch_size)*10, tracking_window, tracking_window);
     n.train(tracking_window*10, tracking_window, tracking_window);
-    delete reader1;
-    delete reader2;
+    delete *reader1;
+    delete *reader2;
 //    saver->save();
 }
 

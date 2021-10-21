@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
     char* train_image_bin;
     char* test_label_bin;
     char* test_image_bin;
-    //char* train_mean_file;
+    char* train_mean_file;
 
     //train_mean_file = (char *) "/content/data3/cifar_train.mean";
     train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
@@ -20,10 +20,11 @@ int main(int argc, char **argv) {
     const size_t batch_size = 256; //train and test must be same
     const size_t C = 3, H = 32, W = 32;
     const int flag = 0;     // 1 for read from memory, 0 for read from disk
+    float channel_mean[3] = {125.306915, 122.950394, 113.865349};
 
 
-    //base_preprocess_t<float>* mean_sub =
-            //(base_preprocess_t<float>*) new mean_subtraction_t<float>(batch_size, C, H, W, train_mean_file);
+    base_preprocess_t<float>* mean_sub =
+            (base_preprocess_t<float>*) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
 
     base_preprocess_t<float> *pad = (base_preprocess_t<float> *) new border_padding_t<float>(
             batch_size, C, H, W, 4, 4);
@@ -38,7 +39,7 @@ int main(int argc, char **argv) {
     base_preprocess_t<float> *standardization =
             (base_preprocess_t<float> *) new per_image_standardization_t<float>(
                     batch_size, C, H, W);
-/*
+
     preprocessor<float>* processor = new preprocessor<float>();
     processor->add_preprocess(mean_sub)
             ->add_preprocess(pad)
@@ -48,17 +49,10 @@ int main(int argc, char **argv) {
             ->add_preprocess(contrast)
             ->add_preprocess(standardization);
     preprocessor<float>* p2 = new preprocessor<float>();
-    p2->add_preprocess(new mean_subtraction_t<float>(batch_size, C, H, W, train_mean_file))
+    p2->add_preprocess(new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean))
             ->add_preprocess(new per_image_standardization_t<float>(batch_size, C, H, W));
-*/
-    processor->add_preprocess(pad)
-            ->add_preprocess(crop)
-            ->add_preprocess(flip)
-            ->add_preprocess(bright)
-            ->add_preprocess(contrast)
-            ->add_preprocess(standardization);
-    preprocessor<float>* p2 = new preprocessor<float>();
-    p2->add_preprocess(new per_image_standardization_t<float>(batch_size, C, H, W));
+
+
     //test
     parallel_reader_t<float > *reader2 = new parallel_reader_t<float>(test_image_bin, test_label_bin, 2, batch_size, 3, 32, 32, p2, 4, 1,
                                                                       flag);
