@@ -6,6 +6,8 @@ runNetwork() {
 	echo	"batchsize	: $3"
 	echo	"./testing/$1 $3 > $2"
 	`./testing/$1 $3 > ../result2/$2`
+	#>表示child selector
+	#$? gives the status of the last command executed
 	ret_val=$?
 	`grep loss ../result2/$2 > ../result2/$2_loss.log`
 	`grep "TOTAL TRACKED" ../result2/$2 > ../result2/$2_mem.log`
@@ -53,7 +55,7 @@ pack1() {
 		if [ $? -ne 0 ]; then
 			break
 		fi
-		batch1=`expr $batch1 + 256`
+		batch=`expr $batch + 256`
 	done
 }
 
