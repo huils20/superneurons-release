@@ -2,7 +2,7 @@ CUDA_ROOT_DIR=/usr/local/cuda-10.0
 #CUDNN_ROOT_DIR=/data/lwang53/lib/cuDNN7.0
 #直接在cuda.cmake定义了关于cudnn的路径
 
-GLOG_ROOT=/content/glog
+GLOG_ROOT=/content/glog/build
 PROJECT_SOURCE_DIR=/content/superneurons-release
 
 # example
