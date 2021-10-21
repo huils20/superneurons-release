@@ -75,8 +75,8 @@ target_link_libraries(cifar10 superneurons)
 #CUDA_ADD_EXECUTABLE(inception_v4 inception_v4.cpp)
 #target_link_libraries(inception_v4 superneurons)
 
-#CUDA_ADD_EXECUTABLE(vgg16 vgg16.cpp)
-#target_link_libraries(vgg16 superneurons)
+CUDA_ADD_EXECUTABLE(vgg16 vgg16.cpp)
+target_link_libraries(vgg16 superneurons)
 
 #CUDA_ADD_EXECUTABLE(forkfork forkfork.cpp ../include/layer/cudnn_convolution_layer.h)
 #target_link_libraries(forkfork superneurons)

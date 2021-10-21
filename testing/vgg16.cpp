@@ -13,10 +13,10 @@ int main(int argc, char **argv) {
 //    char *checkpoint;
 
 //    train_mean_file = (char *) "/home/ay27/dataset/bin_file/imgnet_train.mean";
-    train_image_bin = (char *) "/home/ay27/dataset/bin_file/train_data_0.bin";
-    train_label_bin = (char *) "/home/ay27/dataset/bin_file/train_label_0.bin";
-    test_image_bin  = (char *) "/home/ay27/dataset/bin_file/val_data_0.bin";
-    test_label_bin  = (char *) "/home/ay27/dataset/bin_file/val_label_0.bin";
+    train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
+    train_label_bin = (char *) "/content/data3/cifar10_train_label_0.bin";
+    test_image_bin  = (char *) "/content/data3/cifar10_test_image_0.bin";
+    test_label_bin  = (char *) "/content/data3/cifar10_test_label_0.bin";
 //    checkpoint_file = (char *) "/home/ay27/dataset/bin_file/alexnet_checkpoint";
 
 //    train_image_bin = (char *) "/home/wwu/DeepLearning/data/imgnet/imgnet_val_data_0.bin";
@@ -223,19 +223,20 @@ int main(int argc, char **argv) {
     n.bsetup(softmax);
 
     // test set #50000 imgs
-    n.setup_test(data_2, 50000 / batch_size);
+    n.setup_test(data_2, 10000 / batch_size);
 
-    const size_t train_imgs = 1281166;
+    const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs / batch_size;
 
 //    saver->load();
 
-    // 100 epoch
+    // 10 epoch
     // testing every epoch
-    printf("total iteration: %zu, test interval : %zu\n", (train_imgs/batch_size)*100, train_imgs/batch_size);
+    printf("total iteration: %zu, test interval : %zu\n", (train_imgs/batch_size)*10, train_imgs/batch_size);
 //    n.train((train_imgs/batch_size)*100, tracking_window, tracking_window);
-    n.train(10, 100, 100);
-
+    n.train(tracking_window*10, tracking_window, tracking_window);
+    delete reader1;
+    delete reader2;
 //    saver->save();
 }
 

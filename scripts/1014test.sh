@@ -58,7 +58,24 @@ pack1() {
 		batch=`expr $batch + 256`
 	done
 }
+pack2() {
+	makeit $1 $2
+	
+	batch=16
+    ret_val=0
+	while : ; do
+		testFunc vgg16 $1 $2 $batch
+		if [ $? -ne 0 ]; then
+			break
+		fi
+		batch=`expr $batch + 16`
+	done
+}
 
 pack1 false false	# no
 pack1 false true		# recompute
 pack1 true true		# prefetch and recompute
+
+pack2 false false	# no
+pack2 false true		# recompute
+pack2 true true		# prefetch and recompute
