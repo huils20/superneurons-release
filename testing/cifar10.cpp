@@ -118,11 +118,11 @@ int main(int argc, char **argv) {
     n.fsetup(data_1);
     n.bsetup(softmax);
 
-    n.setup_test( data_2, 10000 / batch_size );
+    n.setup_test( data_2, 100 );
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
-    n.train(tracking_window*10, tracking_window, tracking_window);
+    n.train(20000, tracking_window, 1000);
 
     delete reader1;
     delete reader2;
