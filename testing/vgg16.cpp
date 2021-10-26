@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
 
     const size_t batch_size = static_cast<const size_t>(atoi(argv[1])); //train and test must be same
-    const size_t C = 3, H = 277, W = 277;
+    const size_t C = 3, H = 227, W = 227;
 
 
     base_preprocess_t<float> *flip = (base_preprocess_t<float> *) new random_flip_left_right_t<float>(
@@ -225,7 +225,7 @@ int main(int argc, char **argv) {
     // test set #50000 imgs
     n.setup_test(data_2, 50000 / batch_size);
 
-    const size_t train_imgs = 50000;
+    const size_t train_imgs = 1281166;
     const size_t tracking_window = train_imgs / batch_size;
 
 //    saver->load();

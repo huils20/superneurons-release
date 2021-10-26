@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#prefetch,recompute
 runNetwork() {
 	echo	"runNetwork	: $1"
 	echo	"log file	: $2"
@@ -44,7 +44,7 @@ makeit() {
 	make release -j
 }
 
-pack1() {
+cifar10() {
 	makeit $1 $2
 	
 	batch=256
@@ -57,7 +57,7 @@ pack1() {
 		batch=`expr $batch + 256`
 	done
 }
-pack2() {
+vgg16() {
 	makeit $1 $2
 	
 	batch=16
@@ -71,6 +71,6 @@ pack2() {
 	done
 }
 
-pack1 false false	# no
-pack1 false true		# recompute
-pack1 true true		# prefetch and recompute
+cifar10 false false	# no
+#cifar10 false true		# recompute
+#cifar10 true true		# prefetch and recompute

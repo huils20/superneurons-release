@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
     char* train_image_bin;
     char* test_label_bin;
     char* test_image_bin;
-    char* train_mean_file;
+    //char* train_mean_file;
 
     //train_mean_file = (char *) "/content/data3/cifar_train.mean";
     train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
             ->add_preprocess(standardization);
     preprocessor<float>* p2 = new preprocessor<float>();
     p2->add_preprocess(new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean))
-            ->add_preprocess(new per_image_standardization_t<float>(batch_size, C, H, W));
+            ->add_preprocess(new per_image_standardization_t<float>(batch_size, C, H, W));//mean file或channel mean即可
 
 
     //test
@@ -118,11 +118,12 @@ int main(int argc, char **argv) {
     n.fsetup(data_1);
     n.bsetup(softmax);
 
-    n.setup_test( data_2, 100 );
+    n.setup_test( data_2, 39 );
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
-    n.train(20000, tracking_window, 1000);
+    //n.train(tracking_window*10, tracking_window, tracking_window);
+    n.train(1950,195,195);
 
     delete reader1;
     delete reader2;
