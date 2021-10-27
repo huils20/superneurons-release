@@ -20,14 +20,14 @@
 #include <cuda_runtime.h>
 #include <glog/logging.h>
 #include <util/superneurons_math.h>
-
+/*
 #define LIVENESS
-//#define RECOMPUTE_ON
-//#define LARGER
-//#define LRU_ON
-//#define BLASX_MALLOC
-//#define BENCHMARK
-
+#define RECOMPUTE_ON
+#define LARGER
+#define LRU_ON
+#define BLASX_MALLOC
+#define BENCHMARK
+*/
 #define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*3L)
 
 
