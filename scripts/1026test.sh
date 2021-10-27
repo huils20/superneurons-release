@@ -45,7 +45,7 @@ testFunc() {
 		cmd="${cmd} -DBLASX_MALLOC=1"
 	fi
 
-	rm -rf /home/ay27/superneurons_ay27/build/*
+	rm -rf /content/superneurons-release/build/*
 	cmd="${cmd} .."
 	echo $cmd
 	`$cmd`
