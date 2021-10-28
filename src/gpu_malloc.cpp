@@ -14,7 +14,7 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
 #endif
     if (free_mem > BLASX_GPU_INIT_MEM) {
 #ifdef gpu_malloc_info
-        printf("initilizing gpu mem");
+        printf("initilizing gpu mem\n");
         printf("free mem:%lu, total_mem:%lu\n", free_mem/1000000, total_mem/1000000);
 #endif
     }else{

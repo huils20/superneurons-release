@@ -164,10 +164,10 @@ void network_t<value_type>::forward_kernel(network_stage stage, base_layer_t<val
             *loss = b->forward(stage, &cublas_handle, &cudnn_handle, reg);
             // update tensors
             mem_controller.update_tensor_state(layer_id, FORWARD, stage);
-
 #ifdef DEBUG
             printf("forward finish layer %zu %d\n", i, layer_id);
 #endif
+
         }
     }
 }

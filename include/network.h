@@ -147,7 +147,7 @@ private:
                 if (tmp > max_usage) {
                     max_usage = tmp;
                 }
-                if (get_cur_time() - ts > 100.0) {
+                if (get_cur_time() - ts > 1.0) {
                     printf("QUERY====>max gpu usage : %f MB\n", BYTE_TO_MB(max_usage));
                     ts = get_cur_time();
                     max_usage = 0;
