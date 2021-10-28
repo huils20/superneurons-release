@@ -168,6 +168,7 @@ public:
 
         reg = new registry_t<value_type>();
 
+/*
 #ifdef LIVENESS
         printf("LIVENESS !!!!!\n");
 #endif
@@ -183,6 +184,7 @@ public:
 #ifdef BLASX_MALLOC
         printf("BLASX_MALLOC !!!!\n");
 #endif
+*/
         //set affinity
         set_main_thread_cpu_affinity(1);
 

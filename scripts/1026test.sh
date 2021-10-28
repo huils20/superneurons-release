@@ -13,9 +13,6 @@ runNetwork() {
 
 #define LIVENESS
 #define RECOMPUTE_ON
-#define LARGER
-#define LRU_ON
-#define BLASX_MALLOC
 
 testFunc() {
 	echo
@@ -23,10 +20,7 @@ testFunc() {
 	echo	"network 		: $1"
 	echo	"LIVENESS		: $2"
 	echo	"RECOMPUTE_ON	: $3"
-	echo	"LARGER			: $4"
-	echo	"LRU_ON			: $5"
-	echo	"BLASX_MALLOC	: $6"
-	echo	"batchsize		: $7"
+	echo	"batchsize		: $4"
 	
 	cmd="cmake "
 	if [ "$2" = true ]; then
@@ -35,15 +29,6 @@ testFunc() {
 	if [ "$3" = true ]; then
 		cmd="${cmd} -DRECOMPUTE_ON=1"
 	fi
-	if [ "$4" = true ]; then
-		cmd="${cmd} -DLARGER=1"
-	fi
-	if [ "$5" = true ]; then
-		cmd="${cmd} -DLRU_ON=1"
-	fi
-	if [ "$6" = true ]; then
-		cmd="${cmd} -DBLASX_MALLOC=1"
-	fi
 
 	rm -rf /content/superneurons-release/build/*
 	cmd="${cmd} .."
@@ -51,7 +36,7 @@ testFunc() {
 	`$cmd`
 	make release -j
 
-	runNetwork $1 "$1_$2_$3_$4_$5_$6_$7.log" $7
+	runNetwork $1 "$1_L:$2_R:$3_$4.log" $4
 	ret_val=$?
 
 	echo
@@ -63,7 +48,7 @@ cifar10() {
 	batch=128
 	ret_val=1
 	while : ; do
-		testFunc cifar10 $1 $2 $3 $4 $5 $batch
+		testFunc cifar10 $1 $2 $batch
 		ret_val=$?
 		if [ $ret_val -eq 0 ]; then
 			break
@@ -77,5 +62,6 @@ cifar10() {
 #define LARGER
 #define LRU_ON
 #define BLASX_MALLOC
-cifar10 false false false false true #baseline
-cifar10 true false false false true #liveness analyze
+cifar10 false false #baseline
+cifar10 true false #liveness 
+cifar10 true true #liveness+recompute

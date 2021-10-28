@@ -11,6 +11,7 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
     cudaMemGetInfo(&free_mem, &total_mem);
 #ifdef gpu_malloc_info
     fprintf(stderr, "--------init@%d--------\n", GPU_id);
+    printf("--------init@GPU_id：%d--------\n", GPU_id);
 #endif
     if (free_mem > BLASX_GPU_INIT_MEM) {
 #ifdef gpu_malloc_info
@@ -25,6 +26,7 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
 //    size_t BLASX_GPU_MEM_SIZE = 1024L*1024L*10000L;
 #ifdef gpu_malloc_info
     fprintf(stderr,"blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/1000000);
+    printf("blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/1000000);
 #endif
     blasx_gpu_malloc_t *gdata = (blasx_gpu_malloc_t*)malloc( sizeof(blasx_gpu_malloc_t) );
     void *ptr = NULL;
@@ -81,7 +83,7 @@ void blasx_gpu_malloc_fini(blasx_gpu_malloc_t* gdata, int GPU_id)
 {
     cudaSetDevice(GPU_id);
 #ifdef gpu_malloc_info
-    printf("--------dest@%d--------\n", GPU_id);
+    printf("--------dest@GPU_id：%d--------\n", GPU_id);
     printf("Cublas finalization is called.\n");
 #endif
     blasx_gpu_segment_t *s;
