@@ -57,9 +57,12 @@ endif ()
 #define BLASX_MALLOC
 #define BENCHMARK
 
+option(LIVENESS "option for LIVENESS" OFF)
 if (DEFINED LIVENESS)
     ADD_DEFINITIONS(-DLIVENESS)
 endif ()
+
+option(RECOMPUTE_ON "option for RECOMPUTE_ON" OFF)
 if (DEFINED RECOMPUTE_ON)
     ADD_DEFINITIONS(-DRECOMPUTE_ON)
 endif ()

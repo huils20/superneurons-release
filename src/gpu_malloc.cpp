@@ -16,7 +16,7 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
     if (free_mem > BLASX_GPU_INIT_MEM) {
 #ifdef gpu_malloc_info
         printf("initilizing gpu mem\n");
-        printf("free mem:%lu, total_mem:%lu\n", free_mem/1000000, total_mem/1000000);
+        printf("free mem:%lu MB, total_mem:%lu MB\n", free_mem/1000000, total_mem/1000000);
 #endif
     }else{
         fprintf(stderr,"the entire backend memory is less than %luMB FreeMEM:%lu M\n", (size_t)BLASX_GPU_INIT_MEM/1000000, (size_t)free_mem/1000000);
@@ -140,7 +140,7 @@ void *blasx_gpu_malloc(blasx_gpu_malloc_t *gdata, size_t nbytes)
             s->mem_free = 0;
             s->next = n;
 
-//            printf(" blasx malloc size %zu, ptr %p\n", nbytes, n->addr);
+            printf(" blasx malloc size %zu, ptr %p\n", nbytes, n->addr);
 
             gdata->free_size -= nbytes;
 
