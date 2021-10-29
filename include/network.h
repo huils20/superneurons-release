@@ -168,13 +168,14 @@ public:
 
         reg = new registry_t<value_type>();
 
-/*
+
 #ifdef LIVENESS
         printf("LIVENESS !!!!!\n");
 #endif
 #ifdef RECOMPUTE_ON
         printf("RECOMPUTE_ON !!!!!!!!\n");
 #endif
+/*
 #ifdef LARGER
         printf("LARGER !!!!\n");
 #endif

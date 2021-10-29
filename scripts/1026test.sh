@@ -34,9 +34,9 @@ testFunc() {
 	cmd="${cmd} .."
 	echo $cmd
 	`$cmd`
-	make release -j
+	make release
 
-	runNetwork $1 "$1_L:$2_R:$3_$4.log" $4
+	runNetwork $1 "$1_$2_$3_$4.log" $4
 	ret_val=$?
 
 	echo
