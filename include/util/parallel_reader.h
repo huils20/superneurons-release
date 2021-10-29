@@ -91,7 +91,7 @@ public:
     }
 
     void get_batch(tensor_t<value_type> *_data, tensor_t<value_type> *_label);
-
+/*
     inline std::pair<value_type*, value_type* > get_ptrs() {
         if (data == NULL || label == NULL) {
             while ( !q->fetch_gpu_tensor(&data, &label) ) {
@@ -101,7 +101,7 @@ public:
         }
         return std::make_pair(data->get_gpu_ptr(), label->get_gpu_ptr());
     };
-
+*/
     inline size_t getN() const {
         return N;
     }
