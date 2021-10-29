@@ -49,8 +49,7 @@ cifar10() {
 	ret_val=1
 	while : ; do
 		testFunc cifar10 $1 $2 $batch
-		ret_val=$?
-		if [ $ret_val -ne 0 ]; then
+		if [ $? -ne 0 ]; then
 			break
 		fi
 		batch=`expr $batch + 128`

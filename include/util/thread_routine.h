@@ -36,11 +36,13 @@ inline void set_cpu_affinity(pthread_t thread, int cpu_id) {
     if (rc != 0) {
         std::cerr << "Error calling pthread_setaffinity_np with rc = " << rc << std::endl;
     }
+/*    
     else {
         // must wait a little to set affinity
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
         std::cout << "thread run on CPU " << sched_getcpu() << "\n";
     }
+*/
 #endif
 }
 
