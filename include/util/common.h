@@ -1,4 +1,4 @@
-#if !defined(_COMMON_H_)
+#ifndef _COMMON_H_
 #define _COMMON_H_
 
 #include <map>
@@ -24,9 +24,11 @@
 
 #ifndef LIVENESS
 #define LIVENESS
+#endif
 
 #ifndef RECOMPUTE_ON
 #define RECOMPUTE_ON
+#endif
 
 #define LARGER
 #define LRU_ON
