@@ -21,7 +21,7 @@
 #include <glog/logging.h>
 #include <util/superneurons_math.h>
 
-
+/*
 #ifndef LIVENESS
 #define LIVENESS
 #endif
@@ -29,6 +29,7 @@
 #ifndef RECOMPUTE_ON
 #define RECOMPUTE_ON
 #endif
+*/
 
 #define LARGER
 #define LRU_ON
