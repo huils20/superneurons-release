@@ -140,7 +140,7 @@ void *blasx_gpu_malloc(blasx_gpu_malloc_t *gdata, size_t nbytes)
             s->mem_free = 0;
             s->next = n;
 
-            printf(" blasx malloc size %zu, ptr %p\n", nbytes, n->addr);
+            //printf(" blasx malloc size %zu, ptr %p\n", nbytes, n->addr);
 
             gdata->free_size -= nbytes;
 
