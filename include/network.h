@@ -173,9 +173,11 @@ public:
 
 #ifdef LIVENESS
         printf("LIVENESS !!!!!\n");
+        fprintf(stderr,"LIVENESS !!!!!\n");
 #endif
 #ifdef RECOMPUTE_ON
         printf("RECOMPUTE_ON !!!!!!!!\n");
+        fprintf(stderr,"RECOMPUTE_ON !!!!!!!!\n");
 #endif
 /*
 #ifdef LARGER
