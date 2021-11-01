@@ -50,20 +50,20 @@ elseif (${CMAKE_BUILD_TYPE} STREQUAL Release)
 endif ()
 
 
-#define LIVENESS
-#define RECOMPUTE_ON
+# define LIVENESS
+# define RECOMPUTE_ON
 #define LARGER
 #define LRU_ON
 #define BLASX_MALLOC
 #define BENCHMARK
 
 option(LIVENESS "option for LIVENESS" OFF)
-if (DEFINED LIVENESS)
+if (LIVENESS)
     ADD_DEFINITIONS(-DLIVENESS)
 endif ()
 
 option(RECOMPUTE_ON "option for RECOMPUTE_ON" OFF)
-if (DEFINED RECOMPUTE_ON)
+if (RECOMPUTE_ON)
     ADD_DEFINITIONS(-DRECOMPUTE_ON)
 endif ()
 #if (DEFINED LARGER)
