@@ -10,7 +10,7 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
     size_t free_mem, total_mem;
     cudaMemGetInfo(&free_mem, &total_mem);
 #ifdef gpu_malloc_info
-    fprintf(stderr, "--------init@%d--------\n", GPU_id);
+    fprintf(stderr, "--------initGPU_id：@%d--------\n", GPU_id);
     printf("--------init@GPU_id：%d--------\n", GPU_id);
 #endif
     if (free_mem > BLASX_GPU_INIT_MEM) {
@@ -41,7 +41,8 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
     //cudamalloc
     rc = (cudaError_t) cudaMalloc ( &ptr, BLASX_GPU_MEM_SIZE );
 
-//    fprintf(stderr,"blasx pool start ptr %p\n", ptr);
+    fprintf(stderr,"blasx pool start ptr %p\n", ptr);
+    printf("blasx pool start ptr %p\n", ptr);
 
     gdata->base = ptr;
     if( (cudaSuccess != rc) || (NULL == gdata->base) ) {

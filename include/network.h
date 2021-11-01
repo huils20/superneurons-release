@@ -113,9 +113,11 @@ private:
         
         printf("*****************network dependencies***************\n");
         printf("---------------------FORWARD-------------------------\n");
-        reg->print_forward_dependency();
+        //reg->print_forward_dependency();
+        reg->print_forward_dependency_by_tensor();
         printf("---------------------BACKWARD------------------------\n");
-        reg->print_backward_dependency();
+        //reg->print_backward_dependency();
+        reg->print_backward_dependency_by_tensor();
         printf("****************************************************\n");
         
         printf("*****************init memory control****************\n");
