@@ -62,8 +62,9 @@ int main(int argc, char **argv) {
                                                                       flag);
     base_layer_t<float>* data_1 = (base_layer_t<float>*) new data_layer_t<float>(DATA_TRAIN, reader1);
     //加载数据后内存占用
-    size_t data_mem = query_used_mem();
-    printf("after load data the memory used:%f\n", BYTE_TO_MB(data_mem));
+    size_t mem0 = query_used_mem();
+    fprintf(stderr,"after load data the memory used:%f\n", BYTE_TO_MB(mem0));
+
     /*--------------network configuration--------------*/
 
     base_solver_t<float>* solver = (base_solver_t<float> *) new momentum_solver_t<float>(0.01, 0.0, 0.9);
@@ -118,21 +119,23 @@ int main(int argc, char **argv) {
 
     n.fsetup(data_1);
     size_t mem1 = query_used_mem();
-    printf("after fsetup the memory used:%f\n", BYTE_TO_MB(mem1));
+    fprintf(stderr,"after fsetup the memory used:%f\n", BYTE_TO_MB(mem1));
 
     n.bsetup(softmax);
     size_t mem2 = query_used_mem();
-    printf("after bsetup the memory used:%f\n", BYTE_TO_MB(mem2));
+    fprintf(stderr,"after bsetup the memory used:%f\n", BYTE_TO_MB(mem2));
 
     n.setup_test( data_2, 39 );
     size_t mem3 = query_used_mem();
-    printf("after test setup the memory used:%f\n", BYTE_TO_MB(mem3));
+    fprintf(stderr,"after test setup the memory used:%f\n", BYTE_TO_MB(mem3));
 
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
     //n.train(tracking_window*10, tracking_window, tracking_window);
     n.train(1950,195,195);
+    size_t mem4 = query_used_mem();
+    fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem4));
 
     delete reader1;
     delete reader2;
