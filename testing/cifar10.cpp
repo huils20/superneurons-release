@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
     const int flag = 0;     // 1 for read from memory, 0 for read from disk
     float channel_mean[3] = {125.306915, 122.950394, 113.865349};
 
+    size_t mem5 = query_used_mem();
+    fprintf(stderr,"before load data the memory used:%f\n", BYTE_TO_MB(mem5));
 
     base_preprocess_t<float>* mean_sub =
             (base_preprocess_t<float>*) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
@@ -61,6 +63,7 @@ int main(int argc, char **argv) {
     parallel_reader_t<float > *reader1 = new parallel_reader_t<float>(train_image_bin, train_label_bin, 2, batch_size, 3, 32, 32, processor, 4, 4,
                                                                       flag);
     base_layer_t<float>* data_1 = (base_layer_t<float>*) new data_layer_t<float>(DATA_TRAIN, reader1);
+
     //加载数据后内存占用
     size_t mem0 = query_used_mem();
     fprintf(stderr,"after load data the memory used:%f\n", BYTE_TO_MB(mem0));
