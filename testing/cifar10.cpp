@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
     /*--------------network configuration--------------*/
 
     base_solver_t<float>* solver = (base_solver_t<float> *) new momentum_solver_t<float>(0.01, 0.0, 0.9);
-    networdddk_t<float> n(solver);
+    network_t<float> n(solver);
 
     base_layer_t<float>* conv_1 = (base_layer_t<float>*) new conv_layer_t<float>(64, 5, 1, 2, 2, new gaussian_initializer_t<float>(0, 0.02), true, new constant_initializer_t<float>(0.0));
     base_layer_t<float>* relu_1 = (base_layer_t<float>*) new act_layer_t<float>(CUDNN_ACTIVATION_RELU, CUDNN_NOT_PROPAGATE_NAN);
