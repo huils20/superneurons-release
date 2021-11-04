@@ -49,13 +49,14 @@ elseif (${CMAKE_BUILD_TYPE} STREQUAL Release)
     mark_release()
 endif ()
 
-
-# define LIVENESS
-# define RECOMPUTE_ON
-#define LARGER
-#define LRU_ON
-#define BLASX_MALLOC
-#define BENCHMARK
+"""
+define LIVENESS
+define RECOMPUTE_ON
+define LARGER
+define LRU_ON
+define BLASX_MALLOC
+define BENCHMARK
+"""
 
 option(LIVENESS "option for LIVENESS" OFF)
 if (LIVENESS)

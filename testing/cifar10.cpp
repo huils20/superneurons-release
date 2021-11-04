@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
     const int flag = 0;     // 1 for read from memory, 0 for read from disk
     float channel_mean[3] = {125.306915, 122.950394, 113.865349};
 
-    size_t mem5 = query_used_mem();
-    fprintf(stderr,"before load data the memory used:%f\n", BYTE_TO_MB(mem5));
+    size_t mem1 = query_used_mem();
+    fprintf(stderr,"before load data the memory used:%f\n", BYTE_TO_MB(mem1));
 
     base_preprocess_t<float>* mean_sub =
             (base_preprocess_t<float>*) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
@@ -65,13 +65,13 @@ int main(int argc, char **argv) {
     base_layer_t<float>* data_1 = (base_layer_t<float>*) new data_layer_t<float>(DATA_TRAIN, reader1);
 
     //加载数据后内存占用
-    size_t mem0 = query_used_mem();
-    fprintf(stderr,"after load data the memory used:%f\n", BYTE_TO_MB(mem0));
+    size_t mem2 = query_used_mem();
+    fprintf(stderr,"after load data the memory used:%f\n", BYTE_TO_MB(mem2));
 
     /*--------------network configuration--------------*/
 
     base_solver_t<float>* solver = (base_solver_t<float> *) new momentum_solver_t<float>(0.01, 0.0, 0.9);
-    network_t<float> n(solver);
+    networdddk_t<float> n(solver);
 
     base_layer_t<float>* conv_1 = (base_layer_t<float>*) new conv_layer_t<float>(64, 5, 1, 2, 2, new gaussian_initializer_t<float>(0, 0.02), true, new constant_initializer_t<float>(0.0));
     base_layer_t<float>* relu_1 = (base_layer_t<float>*) new act_layer_t<float>(CUDNN_ACTIVATION_RELU, CUDNN_NOT_PROPAGATE_NAN);
@@ -121,24 +121,24 @@ int main(int argc, char **argv) {
     full_conn_3->hook(softmax);
 
     n.fsetup(data_1);
-    size_t mem1 = query_used_mem();
-    fprintf(stderr,"after fsetup the memory used:%f\n", BYTE_TO_MB(mem1));
+    size_t mem3 = query_used_mem();
+    fprintf(stderr,"after fsetup the memory used:%f\n", BYTE_TO_MB(mem3));
 
     n.bsetup(softmax);
-    size_t mem2 = query_used_mem();
-    fprintf(stderr,"after bsetup the memory used:%f\n", BYTE_TO_MB(mem2));
+    size_t mem4 = query_used_mem();
+    fprintf(stderr,"after bsetup the memory used:%f\n", BYTE_TO_MB(mem4));
 
     n.setup_test( data_2, 39 );
-    size_t mem3 = query_used_mem();
-    fprintf(stderr,"after test setup the memory used:%f\n", BYTE_TO_MB(mem3));
+    size_t mem5 = query_used_mem();
+    fprintf(stderr,"after test setup the memory used:%f\n", BYTE_TO_MB(mem5));
 
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
     //n.train(tracking_window*10, tracking_window, tracking_window);
     n.train(1950,195,195);
-    size_t mem4 = query_used_mem();
-    fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem4));
+    size_t mem6 = query_used_mem();
+    fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem6));
 
     delete reader1;
     delete reader2;
