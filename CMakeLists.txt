@@ -49,13 +49,13 @@ elseif (${CMAKE_BUILD_TYPE} STREQUAL Release)
     mark_release()
 endif ()
 
-"""
-#define LARGER
-#define LRU_ON
-#define BLASX_MALLOC
-#define BENCHMARK
-"""
 
+# define LARGER
+# define LRU_ON
+# define BLASX_MALLOC
+# define BENCHMARK
+
+# 下边俩define是必须的吗
 #define LIVENESS
 #define RECOMPUTE_ON
 option(LIVENESS "option for LIVENESS" OFF)
