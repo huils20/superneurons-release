@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
     const int flag = 0;     // 1 for read from memory, 0 for read from disk
     float channel_mean[3] = {125.306915, 122.950394, 113.865349};
 
+    //
     size_t mem1 = query_used_mem();
     fprintf(stderr,"before load data the memory used:%f\n", BYTE_TO_MB(mem1));
 
@@ -64,7 +65,7 @@ int main(int argc, char **argv) {
                                                                       flag);
     base_layer_t<float>* data_1 = (base_layer_t<float>*) new data_layer_t<float>(DATA_TRAIN, reader1);
 
-    //加载数据后内存占用
+    //
     size_t mem2 = query_used_mem();
     fprintf(stderr,"after load data the memory used:%f\n", BYTE_TO_MB(mem2));
 
@@ -121,14 +122,17 @@ int main(int argc, char **argv) {
     full_conn_3->hook(softmax);
 
     n.fsetup(data_1);
+    //
     size_t mem3 = query_used_mem();
     fprintf(stderr,"after fsetup the memory used:%f\n", BYTE_TO_MB(mem3));
 
     n.bsetup(softmax);
+    //
     size_t mem4 = query_used_mem();
     fprintf(stderr,"after bsetup the memory used:%f\n", BYTE_TO_MB(mem4));
 
     n.setup_test( data_2, 39 );
+    //
     size_t mem5 = query_used_mem();
     fprintf(stderr,"after test setup the memory used:%f\n", BYTE_TO_MB(mem5));
 
@@ -137,6 +141,7 @@ int main(int argc, char **argv) {
     //10 epoch
     //n.train(tracking_window*10, tracking_window, tracking_window);
     n.train(1950,195,195);
+    //
     size_t mem6 = query_used_mem();
     fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem6));
 

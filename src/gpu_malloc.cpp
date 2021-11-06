@@ -25,8 +25,8 @@ blasx_gpu_malloc_t *blasx_gpu_malloc_init(int GPU_id)
 //    size_t BLASX_GPU_MEM_SIZE = free_mem*0.6;       // TODO : give a fix size?
 //    size_t BLASX_GPU_MEM_SIZE = 1024L*1024L*10000L;
 #ifdef gpu_malloc_info
-    fprintf(stderr,"blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/1000000);
-    printf("blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/1000000);
+    fprintf(stderr,"blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/(1024*1024));
+    printf("blasx_gpu_malloc is using %lu MB\n", (size_t) BLASX_GPU_MEM_SIZE/(1024*1024));
 #endif
     blasx_gpu_malloc_t *gdata = (blasx_gpu_malloc_t*)malloc( sizeof(blasx_gpu_malloc_t) );
     void *ptr = NULL;
