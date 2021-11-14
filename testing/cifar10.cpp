@@ -10,12 +10,14 @@ int main(int argc, char **argv) {
     char* test_label_bin;
     char* test_image_bin;
     //char* train_mean_file;
+    //char* checkpoint_file;
 
     //train_mean_file = (char *) "/content/data3/cifar_train.mean";
     train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
     train_label_bin = (char *) "/content/data3/cifar10_train_label_0.bin";
     test_image_bin  = (char *) "/content/data3/cifar10_test_image_0.bin";
     test_label_bin  = (char *) "/content/data3/cifar10_test_label_0.bin";
+    //checkpoint_file = (char *) ""
 
     const size_t batch_size = 256; //train and test must be same
     const size_t C = 3, H = 32, W = 32;

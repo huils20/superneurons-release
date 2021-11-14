@@ -11,11 +11,13 @@ int main(int argc, char **argv) {
     char* test_image_bin;
     char* train_mean_file;
 
+
     train_mean_file = (char *) "/home/wwu/DeepLearning/data/cifar/cifar10_train_image.mean";
     train_image_bin = (char *) "/home/wwu/DeepLearning/data/cifar/cifar10_train_image_0.bin";
     train_label_bin = (char *) "/home/wwu/DeepLearning/data/cifar/cifar10_train_label_0.bin";
     test_image_bin  = (char *) "/home/wwu/DeepLearning/data/cifar/cifar10_test_image_0.bin";
     test_label_bin  = (char *) "/home/wwu/DeepLearning/data/cifar/cifar10_test_label_0.bin";
+
     const size_t batch_size = 100; //train and test must be same
     const size_t C = 3, H = 32, W = 32;
 

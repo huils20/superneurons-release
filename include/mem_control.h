@@ -48,7 +48,7 @@ public:
     }
     
     ~mem_controller_t() {
-//        print_regulated_tensors(true);
+        print_regulated_tensors(true);
     }
     
     void init(registry_t<value_type> *r);
