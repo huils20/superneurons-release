@@ -189,7 +189,7 @@ void network_t<value_type>::backward_with_update_kernel(base_layer_t<value_type>
             
             tensor_t<value_type>* weight_grad = this->reg->get_reg_weight_grad( layer_id );
             if( weight_grad != NULL ) {
-                //weight_grad->clip(this->get_cublas_handle());
+                //weight_grad->clip(this->get_cublas_handle());  //没有clip的定义
                 std::string idx = std::to_string( i );
                 std::string filename = "gradient" + idx;
                 weight_grad->writeToFile(filename.c_str());
