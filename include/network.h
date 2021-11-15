@@ -149,7 +149,7 @@ private:
                 if (tmp > max_usage) {
                     max_usage = tmp;
                 }
-                if (get_cur_time() - ts > 1.0) {
+                if (get_cur_time() - ts > 60.0) {
                     printf("QUERY====>max gpu usage : %f MB\n", BYTE_TO_MB(max_usage));
                     ts = get_cur_time();
                     max_usage = 0;
@@ -325,7 +325,7 @@ public:
 
             double iter_start = get_cur_time();
             /*--network calculation--*/
-            loss = forward(NET_TRAIN);
+            loss = forward(NET_TRAIN); //stash tensor/update tensor state
             backward();
             update(i);
             //backward_with_update(i);

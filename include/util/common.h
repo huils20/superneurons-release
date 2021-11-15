@@ -34,7 +34,7 @@
 #define LARGER
 #define LRU_ON
 #define BLASX_MALLOC
-//#define BENCHMARK就输出了一个softmax loss time
+//#define BENCHMARK输出了一个softmax loss time,collect conv buff size
 
 #define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*3L)  //3000MB
 

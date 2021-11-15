@@ -27,7 +27,7 @@ std::vector<double> network_t<value_type>::network_perf_profile() {
             } else if(dir == BACKWARD) {
                 b->backward(NET_TRAIN, &cublas_handle, &cudnn_handle, reg);
             }
-            //cudaStreamSynchronize(stream);
+            cudaStreamSynchronize(stream);
         }
         LAYER layer_type = b->get_layer_type();
         double end  = get_cur_time();
@@ -186,7 +186,7 @@ void network_t<value_type>::backward_with_update_kernel(base_layer_t<value_type>
             base_layer_t<value_type>* b = (base_layer_t<value_type>*) net_layers.find(layer_id)->second;
             b->backward(NET_TRAIN, &cublas_handle, &cudnn_handle, reg);
             // when backward finish, do the update immediately
-            /*
+            
             tensor_t<value_type>* weight_grad = this->reg->get_reg_weight_grad( layer_id );
             if( weight_grad != NULL ) {
                 weight_grad->clip(this->get_cublas_handle());
@@ -194,7 +194,7 @@ void network_t<value_type>::backward_with_update_kernel(base_layer_t<value_type>
                 std::string filename = "gradient" + idx;
                 weight_grad->writeToFile(filename.c_str());
             }
-            */
+            
             b->update(&cublas_handle, iter, solver);
             // update tensors
             mem_controller.update_tensor_state(layer_id, BACKWARD, NET_TRAIN);
