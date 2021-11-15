@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
 
     full_conn_3->hook(softmax);
 
-    n.network_perf_profile()
+    n.network_perf_profile();
     size_t mem7 = query_used_mem();
     fprintf(stderr,"after network_perf_profile the memory used:%f\n", BYTE_TO_MB(mem7));
 
