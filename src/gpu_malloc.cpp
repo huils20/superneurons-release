@@ -1,5 +1,8 @@
 #include <gpu_malloc.h>
 #define gpu_malloc_info
+#ifndef BYTE_TO_MB(_size_in_byte)
+#define BYTE_TO_MB(_size_in_byte) (((double)(_size_in_byte)) / 1024.0 / 1024.0)
+#endif
 
 blasx_gpu_singleton* blasx_gpu_singleton::instance = NULL;
 
