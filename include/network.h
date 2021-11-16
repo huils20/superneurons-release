@@ -288,14 +288,14 @@ public:
         base_layer_t<value_type>* n = this->softmax_loss_layer;
         backward_kernel(n);
     }
-
+/*
     void backward_with_update(size_t iter) {
         assert(this->softmax_loss_layer != NULL);
 
         base_layer_t<value_type>* n = this->softmax_loss_layer;
         backward_with_update_kernel(n, iter);
     }
-    
+*/    
     void update( size_t iter) {
         assert(this->train_data_layer != NULL);
         base_layer_t<value_type>* start = this->train_data_layer;

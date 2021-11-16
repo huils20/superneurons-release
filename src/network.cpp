@@ -171,7 +171,7 @@ void network_t<value_type>::forward_kernel(network_stage stage, base_layer_t<val
         }
     }
 }
-
+/*
 template <class value_type>
 void network_t<value_type>::backward_with_update_kernel(base_layer_t<value_type>* l, size_t iter) {
     std::vector<std::pair<int, net_comp> > net_comp_route = reg->get_net_comp_route();
@@ -206,7 +206,7 @@ void network_t<value_type>::backward_with_update_kernel(base_layer_t<value_type>
     }
     mem_controller.reset_tensor_state();
 }
-    
+*/    
 template <class value_type>
 void network_t<value_type>::update_kernel(base_layer_t<value_type>* b, size_t iter) {
     for(size_t i = 0; i < reg->get_net_comp_route().size(); i++) {
