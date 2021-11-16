@@ -431,7 +431,7 @@ void conv_layer_t<value_type>::forward_setup(registry_t<value_type>* reg, cudnnH
     printf("\n------------------conv-layer forward setup %d \n", this->get_id());
     printf("output tensor dims:%d %d %d %d \n", t_output_dim[0], t_output_dim[1] ,t_output_dim[2], t_output_dim[3]);
     printf("Fastest forward conv is Algo %d\n", this->f_conv_alg);
-    printf("the size of forward CNN buffer space is %.3f MB\n", (double) this->f_conv_buff_size/1024.0f / 1024.0f);
+    printf("the size of forward CNN buffer space is %f MB\n", (double) this->f_conv_buff_size/1024.0f / 1024.0f);
 
     //make sure all the necessary tensors are properly set
     assert( this->get_f_out()       != NULL );

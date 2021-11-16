@@ -311,7 +311,7 @@ void mem_controller_t<value_type>::print_regulated_tensors(bool log, int layer_i
         for (it = regulated_tensors.begin(); it != regulated_tensors.end(); it++) {
             if (it->first->get_type() == CONV_BUFF || it->first->into_cnt == 0) {
                 conv_buff += it->first->get_mem_size();
-                printf("layer %d  conv buff %zu  %.3fMB\n",
+                printf("layer %d  conv buff %zu  %fMB\n",
                        it->first->get_layer_id(), it->first->get_mem_size(), (double)(it->first->get_mem_size())/1024.0/1024.0);
             }
         }

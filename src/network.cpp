@@ -168,6 +168,7 @@ void network_t<value_type>::forward_kernel(network_stage stage, base_layer_t<val
             printf("forward finish layer %zu %d\n", i, layer_id);
 #endif
 
+        printf("-----forward finish layer %zu %d-----\n", i, layer_id);
         }
     }
 }
@@ -232,6 +233,7 @@ void network_t<value_type>::backward_kernel(base_layer_t<value_type>* b) {
             base_layer_t<value_type>* b = (base_layer_t<value_type>*) net_layers.find(layer_id)->second;
             b->backward(NET_TRAIN, &cublas_handle, &cudnn_handle, reg);
             mem_controller.update_tensor_state(layer_id, BACKWARD, NET_TRAIN);
+            printf("-----backward finish layer %zu %d-----\n", i, layer_id);
         }
     }
     value_type sum = reg->get_grad_sqrsum();
