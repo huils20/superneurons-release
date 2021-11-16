@@ -96,6 +96,10 @@ int main(int argc, char **argv) {
 
     base_layer_t<float>* full_conn_3 = (base_layer_t<float>*) new fully_connected_layer_t<float> (10, new gaussian_initializer_t<float>(0, 0.02), true, new constant_initializer_t<float>(0.0));
     base_layer_t<float>* softmax = (base_layer_t<float>*) new softmax_layer_t<float>(CUDNN_SOFTMAX_ACCURATE, CUDNN_SOFTMAX_MODE_INSTANCE);
+    
+    //
+    size_t mem8 = query_used_mem();
+    fprintf(stderr,"after network config the memory used:%f\n", BYTE_TO_MB(mem8));
 
     //setup test
     data_2->hook_to( conv_1 );
@@ -123,9 +127,9 @@ int main(int argc, char **argv) {
 
     full_conn_3->hook(softmax);
 
-    n.network_perf_profile();
+    //
     size_t mem7 = query_used_mem();
-    fprintf(stderr,"after network_perf_profile the memory used:%f\n", BYTE_TO_MB(mem7));
+    fprintf(stderr,"after setup network the memory used:%f\n", BYTE_TO_MB(mem7));
 
     n.fsetup(data_1);
     //
@@ -146,7 +150,7 @@ int main(int argc, char **argv) {
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
     //n.train(tracking_window*10, tracking_window, tracking_window);
-    n.train(1950,195,195);
+    n.train(195,195,195);
     //
     size_t mem6 = query_used_mem();
     fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem6));

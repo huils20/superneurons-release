@@ -125,26 +125,26 @@ void *blasx_gpu_malloc(blasx_gpu_malloc_t *gdata, size_t nbytes)
     }
 
     blasx_gpu_segment_t *s, *n;
-    for(s = gdata->allocated_segments; s->next != NULL; s = s->next) {
-        if ( s->mem_free >= nbytes ) {
+    for(s = gdata->allocated_segments; s->next != NULL; s = s->next) {//遍历已分配的段
+        if ( s->mem_free >= nbytes ) {//Size of memory free after this segment
             assert(nbytes >= 0);
-            n = gdata->free_segments;
+            n = gdata->free_segments;//分配一个新段n
             gdata->free_segments = gdata->free_segments->next;
-            n->addr = s->addr + s->mem_size;
+            n->addr = s->addr + s->mem_size;//新段的地址
             n->mem_size = nbytes;
             n->mem_free = s->mem_free - n->mem_size;
             n->next = s->next;
-            n->prev = s;
+            n->prev = s;//插入新段
             if (s->next != NULL) {
                 s->next->prev = n;
             }
             s->mem_free = 0;
             s->next = n;
 
-            //printf(" blasx malloc size %zu, ptr %p\n", nbytes, n->addr);
+            printf(" blasx malloc size %f MB\n", BYTE_TO_MB(nbytes));
 
             gdata->free_size -= nbytes;
-
+            printf("gdata_free_size=%f MB\n",BYTE_TO_MB(gdata->free_size));
             return (void*)(n->addr);
         }
     }
@@ -161,13 +161,13 @@ void blasx_gpu_free(blasx_gpu_malloc_t *gdata, void *addr)
 
     for(s = gdata->allocated_segments->next; s->next != NULL; s = s->next) {
         if ( s->addr == addr ) {
-            p->next = s->next;
+            p->next = s->next;//删去段s
             if (s->next != NULL) {
                 s->next->prev = p;
             }
-
+            printf(" blasx free size %f MB\n", BYTE_TO_MB(s->mem_size + s->mem_free));
             gdata->free_size += s->mem_size + s->mem_free;
-
+            printf("gdata_free_size=%f MB\n",BYTE_TO_MB(gdata->free_size));
             p->mem_free += s->mem_size + s->mem_free;
             s->next = gdata->free_segments;
             s->prev = NULL;

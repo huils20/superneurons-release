@@ -234,7 +234,7 @@ void mem_controller_t<value_type>::update_tensor_state(int layer_id, net_comp di
     if (it != reg->get_net_layers().end()) {
         base_layer_t<value_type>* l = (base_layer_t<value_type>*)it->second;
         if (l->get_layer_type() == CONV) {
-            ???;
+            //藏私???;
         }
     }
 #endif

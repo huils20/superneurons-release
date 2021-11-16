@@ -6,8 +6,6 @@
 #include <util/common.h>
 #include <map>
 
-#define BLASX_GPU_MEM_MAX_SEGMENT    200
-#define BLASX_GPU_INIT_MEM 1000000*50
 
 /*---gpu_malloc---*/
 typedef struct segment {
@@ -39,6 +37,7 @@ private:
     std::map<int, blasx_gpu_malloc_t*> malloc_gpus;
 
     blasx_gpu_singleton() {
+        //又藏私了？？
 
     }
 

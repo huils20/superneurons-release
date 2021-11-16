@@ -44,7 +44,7 @@ public:
         }
     }
 
-    void update(void* item) {
+    void update(void* item) {//调整到head
         if (item == NULL) {
             return;
         }

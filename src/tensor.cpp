@@ -117,8 +117,8 @@ void tensor_t<value_type>::CPUtoGPU() {
         return;
     }
 
-    bool is_void_pre = this->get_state() == VOID;
-    bool is_recompute_pre = this->get_state() == RECOMPUTE;
+    bool is_void_pre = this->get_state() == VOID; //什么意思？？
+    bool is_recompute_pre = this->get_state() == RECOMPUTE; //mem mode
 
     if (this->gpu_ptr == NULL) {
         stash_gpu_space();
@@ -132,7 +132,7 @@ void tensor_t<value_type>::CPUtoGPU() {
 
 #ifdef LRU_ON
         if (this->get_type() == DATA) {
-            lru->update(this);
+            lru->update(this);//调整到head
         }
 #endif
 

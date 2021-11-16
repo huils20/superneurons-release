@@ -36,7 +36,9 @@
 #define BLASX_MALLOC
 //#define BENCHMARK输出了一个softmax loss time,collect conv buff size
 
-#define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*3L)  //3000MB
+#define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*3L)  /*3000MB*/
+#define BLASX_GPU_MEM_MAX_SEGMENT    200    /*除了头尾，再预分配200个段*/
+#define BLASX_GPU_INIT_MEM (1024L*1024L*50L)   /*只用来做了一次判断*/
 
 
 typedef std::pair<int, int> d_key_t;

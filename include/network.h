@@ -126,7 +126,7 @@ private:
         printf("****************************************************\n");
     }
 
-    
+    std::vector<double> network_perf_profile();
 
     std::shared_ptr<std::thread> query_thread;
     std::atomic_bool query_stop;
@@ -162,7 +162,7 @@ private:
     }
 
 public:
-    std::vector<double> network_perf_profile();
+
     network_t(base_solver_t<value_type>* _solver):is_network_computable(false), solver(_solver), clip_gradient_limit(35.0), test_iter(0)
     {
         google::InitGoogleLogging("");
@@ -223,7 +223,8 @@ public:
         //the sequence matters
         destroyHandles();
         //all tensors will be deleted in the registry class
-
+        //藏私了吗？
+        
         // finish all computation, destroy compute stream
         stream_singleton::destory_stream();
 
