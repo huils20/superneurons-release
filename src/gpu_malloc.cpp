@@ -144,10 +144,10 @@ void *blasx_gpu_malloc(blasx_gpu_malloc_t *gdata, size_t nbytes)
             s->mem_free = 0;
             s->next = n;
 
-            printf(" blasx malloc size %f MB\n", BYTE_TO_MB(nbytes));
+            printf(" blasx malloc %f MB\n", BYTE_TO_MB(nbytes));
 
             gdata->free_size -= nbytes;
-            printf("gdata_free_size=%f MB\n",BYTE_TO_MB(gdata->free_size));
+            printf("usage:%f MB\n",3000-BYTE_TO_MB(gdata->free_size));
             return (void*)(n->addr);
         }
     }
@@ -168,9 +168,9 @@ void blasx_gpu_free(blasx_gpu_malloc_t *gdata, void *addr)
             if (s->next != NULL) {
                 s->next->prev = p;
             }
-            printf(" blasx free size %f MB\n", BYTE_TO_MB(s->mem_size + s->mem_free));
+            printf(" blasx free  %f MB\n", BYTE_TO_MB(s->mem_size + s->mem_free));
             gdata->free_size += s->mem_size + s->mem_free;
-            printf("gdata_free_size=%f MB\n",BYTE_TO_MB(gdata->free_size));
+            printf("usage:%f MB\n",3000-BYTE_TO_MB(gdata->free_size));
             p->mem_free += s->mem_size + s->mem_free;
             s->next = gdata->free_segments;
             s->prev = NULL;

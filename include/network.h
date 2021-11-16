@@ -349,7 +349,7 @@ public:
             running_std        = sqrt(running_std / (value_type) loss_queue.size());
             threshold = running_average + 3*running_std;
 
-            if (i % 20 == 0) {
+            if (i % 1 == 0) {
                 double speed_end   = get_cur_time();
                 double speed_time  = speed_end - speed_start;
                 size_t batch_size  = ((data_layer_t<value_type>*) train_data_layer)->get_batch_size();

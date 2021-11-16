@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
     const size_t tracking_window = train_imgs/batch_size;
     //10 epoch
     //n.train(tracking_window*10, tracking_window, tracking_window);
-    n.train(195,195,195);
+    n.train(20,195,195);
     //
     size_t mem6 = query_used_mem();
     fprintf(stderr,"after train the memory used:%f\n", BYTE_TO_MB(mem6));
