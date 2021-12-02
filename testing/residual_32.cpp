@@ -68,18 +68,19 @@ int main(int argc, char **argv) {
 
     network_t<float> n(solver);
 
-    train_mean_file = (char *) "/data/lwang53/cifar/cifar_train.mean";
-    train_image_bin = (char *) "/data/lwang53/cifar/cifar10_train_image_0.bin";
-    train_label_bin = (char *) "/data/lwang53/cifar/cifar10_train_label_0.bin";
-    test_image_bin  = (char *) "/data/lwang53/cifar/cifar10_test_image_0.bin";
-    test_label_bin  = (char *) "/data/lwang53/cifar/cifar10_test_label_0.bin";
+    //train_mean_file = (char *) "/content/data3/cifar_train.mean";
+    train_image_bin = (char *) "/content/data3/cifar10_train_image_0.bin";
+    train_label_bin = (char *) "/content/data3/cifar10_train_label_0.bin";
+    test_image_bin  = (char *) "/content/data3/cifar10_test_image_0.bin";
+    test_label_bin  = (char *) "/content/data3/cifar10_test_label_0.bin";
 
-    const size_t batch_size = 100; //train and test must be same
+    const size_t batch_size = 256; //train and test must be same
     const size_t C = 3, H = 32, W = 32;
+    float channel_mean[3] = {125.306915, 122.950394, 113.865349};
 
 
     base_preprocess_t<float> *mean_sub =
-            (base_preprocess_t<float> *) new mean_subtraction_t<float>(batch_size, C, H, W, train_mean_file);
+            (base_preprocess_t<float> *) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
 
     base_preprocess_t<float> *pad = (base_preprocess_t<float> *) new border_padding_t<float>(
             batch_size, C, H, W, 4, 4);
@@ -96,7 +97,7 @@ int main(int argc, char **argv) {
                     batch_size, C, H, W);
 
     base_preprocess_t<float> *mean_sub1 =
-            (base_preprocess_t<float> *) new mean_subtraction_t<float>(batch_size, C, H, W, train_mean_file);
+            (base_preprocess_t<float> *) new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean);
     base_preprocess_t<float> *standardization1 =
             (base_preprocess_t<float> *) new per_image_standardization_t<float>(
                     batch_size, C, H, W);
@@ -112,7 +113,7 @@ int main(int argc, char **argv) {
             ->add_preprocess(standardization);
 
     preprocessor<float>* p2 = new preprocessor<float>();
-    p2->add_preprocess(new mean_subtraction_t<float>(batch_size, C, H, W, train_mean_file))
+    p2->add_preprocess(new mean_subtraction_t<float>(batch_size, C, H, W, channel_mean))
             ->add_preprocess(new per_image_standardization_t<float>(batch_size, C, H, W));
 
 
@@ -151,7 +152,7 @@ int main(int argc, char **argv) {
 
     // change the loop_num to change the depth
     int nstage[6] = {16, 32, 64, 128, 256, 512};
-//    int nstage[6] = {2, 4, 8, 16, 32, 64};
+    //int nstage[6] = {2, 4, 8, 16, 32, 64};
 
     base_layer_t<float> *net = act_1;
 
@@ -187,7 +188,8 @@ int main(int argc, char **argv) {
     const size_t train_imgs = 50000;
     const size_t tracking_window = train_imgs / batch_size;
 
-    n.train(200000, tracking_window, 500);
+    //n.train(200000, tracking_window, 500);
+    n.train(20, tracking_window, 500);//20个batch
 
 }
 
