@@ -36,8 +36,8 @@
 #define BLASX_MALLOC
 //#define BENCHMARK输出了一个softmax loss time,collect conv buff size
 
-#define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*9L)  /*9000MB*/3000
-#define BLASX_GPU_MEM_MAX_SEGMENT    800    /*除了头尾，再预分配800个段*/200
+#define BLASX_GPU_MEM_SIZE  (1024L*1024L*1000L*9L)  /*9000MB3000*/
+#define BLASX_GPU_MEM_MAX_SEGMENT    800    /*除了头尾，再预分配800个段200*/
 #define BLASX_GPU_INIT_MEM (1024L*1024L*50L)   /*只用来做了一次判断*/
 
 
