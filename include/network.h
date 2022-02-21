@@ -330,6 +330,7 @@ public:
             backward();
             update(i);
             //backward_with_update(i);
+
             /*----loss statistics----*/
             if(loss_queue.size() < tracking_window) {
                 if (std::isfinite(loss)) {
@@ -353,7 +354,7 @@ public:
                 double speed_end   = get_cur_time();
                 double speed_time  = speed_end - speed_start;
                 size_t batch_size  = ((data_layer_t<value_type>*) train_data_layer)->get_batch_size();
-                double train_imgs  = batch_size*20.0f;
+                double train_imgs  = batch_size*20.0f;//???
                 double train_speed = train_imgs / speed_time;
                 speed_start = get_cur_time();
                 time_t tt = time(NULL);
@@ -368,7 +369,7 @@ public:
                        i, solver->get_lr(), loss, running_average, running_std, threshold, train_speed);
             }
             double iter_end = get_cur_time();
-            if (i < 10) {
+            if (i <= 20) {
                 fprintf(stderr,"-----iter:%zu--lr:%f--loss:%f--avg:%f--std:%f--threshold:%f--iter time:%f\n", i, solver->get_lr(), loss, running_average, running_std, threshold, iter_end - iter_start);
             }
             if(i % test_interval == 0) {
