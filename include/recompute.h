@@ -91,7 +91,7 @@ private:
             if (! l->get_prev().empty()) {
                 tensor_t<value_type> *input_tensor = reg->get_reg_output(l->get_prev()[0]->get_base_id(), layer_id);
                 if (is_in_offload_list(input_tensor) && is_backward_dependency(input_tensor, layer_id)) {
-                    should_recompute[layer_id] = true;
+                    should_recompute[layer_id] = true;  //在offload list且为反向依赖则需要recompute
                     continue;
                 }
             }

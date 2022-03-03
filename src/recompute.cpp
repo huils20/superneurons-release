@@ -257,10 +257,10 @@ void recompute_t<value_type>::scan_offload_tensors() {
         if (curt_layer->get_layer_type() == DATA_L) {
             continue;
         }
-        if (!is_checkpoint(curt_layer)) {
-            tensor_t<value_type>* in = reg->get_reg_output(curt_layer->get_prev()[0]->get_base_id(), curt_layer_id);
-            if (!is_checkpoint(curt_layer->get_prev()[0])) {
-                offload_tensors[curt_layer_id].push_back((void *) in);
+        if (!is_checkpoint(curt_layer)) {   //  curt不是ckp
+            tensor_t<value_type>* in = reg->get_reg_output(curt_layer->get_prev()[0]->get_base_id(), curt_layer_id);    //  pre-curt的output
+            if (!is_checkpoint(curt_layer->get_prev()[0])) {    //  pre不是ckp，则将output加入offload list
+                offload_tensors[curt_layer_id].push_back((void *) in);  //非ckp layer
             }
         } else {
             for (size_t i = 0; i < curt_layer->get_prev().size(); ++i) {
@@ -319,19 +319,19 @@ void recompute_t<value_type>::scan_recompute_free_tensor() {
         }
         base_layer_t<value_type>* curt_l = (base_layer_t<value_type>*)tmp->second;
 
-        if (is_checkpoint(curt_l)) {
+        if (is_checkpoint(curt_l)) {    //当前层为ckp层的话，则当前层不进行重计算
             continue;
         }
         for (size_t i = 0; i < reg->get_forward_dependency(curt_layer_id)->size(); ++i) {
-            tensor_t<value_type>* t= reg->get_forward_dependency(curt_layer_id)->operator[](i);
-            if (t->get_type() != DATA && t->get_type() != CONV_BUFF) {
+            tensor_t<value_type>* t= reg->get_forward_dependency(curt_layer_id)->operator[](i); //当前层的依赖tensor t
+            if (t->get_type() != DATA && t->get_type() != CONV_BUFF) {  //依赖tensor的类型不是DATA/CONV_BUFF时，本层不进行重计算
                 continue;
             }
-            // don't free output
+            // don't free output本层的依赖tensor == 本层的输出tensor时，本层不进行重计算
             if (t == reg->get_reg_output(curt_layer_id, curt_l->get_next()[0]->get_base_id())) {
                 continue;
             }
-            // don't free input from checkpoint
+            // don't free input from checkpoint本层的输入tensor来自ckp层时，本层不进行重计算
             if (t == reg->get_reg_output(curt_l->get_prev()[0]->get_base_id(), curt_layer_id) && is_checkpoint(curt_l->get_prev()[0])) {
                 continue;
             }
