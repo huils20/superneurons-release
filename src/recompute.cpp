@@ -34,9 +34,9 @@ void recompute_t<value_type>::find_bottleneck() {
         /*--------------------------------------------------------------------------*/
         // calculate forward dependency memory usage
         size_t tmp1 = 0;
-        auto ftensors = reg->get_forward_dependency(curt_layer_id);
+        auto ftensors = reg->get_forward_dependency(curt_layer_id); //当前层的依赖tensors
         for (auto t = ftensors->begin(); t != ftensors->end(); ++t) {
-            if ((*t)->get_type() != DATA && (*t)->get_type() != CONV_BUFF) {
+            if ((*t)->get_type() != DATA && (*t)->get_type() != CONV_BUFF) {//只考虑这两种类型
                 continue;
             }
 
@@ -44,7 +44,7 @@ void recompute_t<value_type>::find_bottleneck() {
                 continue;
             }
 
-            // don't accumulate output!!!
+            // don't accumulate output!!!输入输出重复的不累计
             for (size_t i = 0; i < curt_l->get_next().size(); ++i) {
                 if ((*t) == reg->get_reg_output(curt_layer_id, curt_l->get_next()[i]->get_base_id())) {
                     continue;
@@ -72,7 +72,7 @@ void recompute_t<value_type>::find_bottleneck() {
         b_mem_usage[curt_layer_id] = tmp2;
 
         // backward bottleneck
-        if (tmp2 > bottleneck_mem_size) {
+        if (tmp2 > bottleneck_mem_size) {   //反向传播的瓶颈才是瓶颈
             bottleneck_mem_size = tmp2;
             bottleneck_layer_id = curt_layer_id;
         }
@@ -116,44 +116,49 @@ void recompute_t<value_type>::scan_checkpoint() {
             continue;
         }
         base_layer_t<value_type> *curt_l = (base_layer_t<value_type> *) tmp->second;
-        if (curt_l->get_layer_type() == DATA_L) {
+        if (curt_l->get_layer_type() == DATA_L) {   //非DATA_L才需要scan ckp
             continue;
         }
 
-        if (!is_checkpoint(curt_l)) {
+        if (!is_checkpoint(curt_l)) {   //非CHECKPOINT_LAYERS才需要scan ckp
             continue;
         }
 
         for (size_t i = 0; i < curt_l->get_next().size(); ++i) {
             base_layer_t<value_type>* curt_checkpoint=curt_l->get_next()[i];
-            size_t curt_seg_mem = 0;
+            size_t curt_seg_mem = 0;    //段内存
             bool larger_than_bottleneck = false;
-            while (!is_checkpoint(curt_checkpoint)) {
+            while (!is_checkpoint(curt_checkpoint)) {   //两个CHECKPOINT_LAYERS间为一段,从curt到下个ckp的段
                 curt_seg_mem += f_mem_usage[curt_checkpoint->get_base_id()];
                 if (curt_seg_mem > bottleneck_mem_size) {
                     larger_than_bottleneck = true;
                 }
-                checkpoints[curt_checkpoint->get_base_id()] = std::make_pair(curt_l, i);
-
+                checkpoints[curt_checkpoint->get_base_id()] = std::make_pair(curt_l, i);    //ckp[curt.next[i]]=(curt,i)
+                                                                                            //ckp[curt.next[i].next[0]]=(curt,i)
+                                                                                            //...
+                                                                                            //ckp[xx]=(curt,i),xx.next[0]为ckp
                 // inner checkpoint, it's linear
                 curt_checkpoint = curt_checkpoint->get_next()[0];
             }
-            if (checkpoints[curt_checkpoint->get_base_id()].first == NULL) {
-                checkpoints[curt_checkpoint->get_base_id()] = std::make_pair(curt_l, i);
+            if (checkpoints[curt_checkpoint->get_base_id()].first == NULL) {    //ckp[ckp].first == null
+                checkpoints[curt_checkpoint->get_base_id()] = std::make_pair(curt_l, i);    //ckp[ckp]=(curt,i)
             }
 
             curt_checkpoint=curt_l->get_next()[i];
             curt_seg_mem = 0;
             while (!is_checkpoint(curt_checkpoint)) {
                 curt_seg_mem += f_mem_usage[curt_checkpoint->get_base_id()];
-                seg_mems[curt_checkpoint->get_base_id()] = std::make_pair(curt_seg_mem, larger_than_bottleneck);
+                seg_mems[curt_checkpoint->get_base_id()] = std::make_pair(curt_seg_mem, larger_than_bottleneck);//sm[curt.next[i]]=(,false)
+                                                                                                                //sm[curt.next[i].next[0]]=(,false)
+                                                                                                                //...
+                                                                                                                //sm[xx]=(,true),xx.next[0]为ckp
 
                 // inner checkpoint, it's linear
                 curt_checkpoint = curt_checkpoint->get_next()[0];
             }
         }
 
-    }
+    }   //遍历计算图
 
     for (int curt_layer_id = max_layer_id; curt_layer_id > 0; --curt_layer_id) {
 
@@ -187,7 +192,7 @@ void recompute_t<value_type>::scan_checkpoint() {
             continue;
         }
 
-        size_t branch_idx = 0;
+        size_t branch_idx = 0;  //分支要么0要么1
         for (size_t i = 0; i < pre_checkpoint->get_next().size(); ++i) {
             if (pre_checkpoint->get_next()[i] == pre_next_checkpoint) {
                 branch_idx = i;
@@ -228,14 +233,14 @@ void recompute_t<value_type>::scan_checkpoint() {
 #ifdef DEBUG
     printf("--------checkpoints----------\n");
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
-        printf("layer %d: checkpoint layer: %d , branch idx: %d\n", layer_id,
+        printf("layer %d: checkpoint layer: %d , branch idx: %d\n", layer_id,   //扫描出每个层对应的ckp层
                checkpoints[layer_id].first == NULL ? 0
                                                    : ((base_layer_t<value_type> *) (checkpoints[layer_id].first))->get_base_id(),
                checkpoints[layer_id].second);
     }
     printf("--------seg_mems---------\n");
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
-        printf("layer %d: mem: %f MB, larger: %d\n",
+        printf("layer %d: mem: %f MB, larger: %d\n",    //扫描出每个层，其段的内存量
                layer_id, (double) seg_mems[layer_id].first / 1024.0 / 1024.0, seg_mems[layer_id].second);
     }
 #endif
@@ -259,10 +264,10 @@ void recompute_t<value_type>::scan_offload_tensors() {
         }
         if (!is_checkpoint(curt_layer)) {   //  curt不是ckp
             tensor_t<value_type>* in = reg->get_reg_output(curt_layer->get_prev()[0]->get_base_id(), curt_layer_id);    //  pre-curt的output
-            if (!is_checkpoint(curt_layer->get_prev()[0])) {    //  pre不是ckp，则将output加入offload list
-                offload_tensors[curt_layer_id].push_back((void *) in);  //非ckp layer
+            if (!is_checkpoint(curt_layer->get_prev()[0])) {    //  pre不是ckp，则将pre的output加入offload list
+                offload_tensors[curt_layer_id].push_back((void *) in);
             }
-        } else {
+        } else {    //curt是ckp
             for (size_t i = 0; i < curt_layer->get_prev().size(); ++i) {
                 base_layer_t<value_type> *prev_layer = curt_layer->get_prev()[i];
 
@@ -285,12 +290,12 @@ void recompute_t<value_type>::scan_offload_tensors() {
                 assert(t != NULL);
                 assert(t->get_type() == DATA);
 
-                offload_tensors[curt_layer_id].push_back((void *) t);
+                offload_tensors[curt_layer_id].push_back((void *) t);   //  pre不是ckp，且...则将pre的output加入offload list
             }
         }
     }
 #ifdef DEBUG
-    printf("------offload tensors-----------\n");
+    printf("------offload tensors-----------\n");   //扫描出可释放的tensor
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
         printf("layer %d: \n", layer_id);
         if (offload_tensors[layer_id].empty()) {
@@ -327,11 +332,11 @@ void recompute_t<value_type>::scan_recompute_free_tensor() {
             if (t->get_type() != DATA && t->get_type() != CONV_BUFF) {  //依赖tensor的类型不是DATA/CONV_BUFF时，本层不进行重计算
                 continue;
             }
-            // don't free output本层的依赖tensor == 本层的输出tensor时，本层不进行重计算
+            // don't free output    本层的依赖tensor == 本层的输出tensor时，本层不进行重计算
             if (t == reg->get_reg_output(curt_layer_id, curt_l->get_next()[0]->get_base_id())) {
                 continue;
             }
-            // don't free input from checkpoint本层的输入tensor来自ckp层时，本层不进行重计算
+            // don't free input from checkpoint 本层的输入tensor来自ckp层时，本层不进行重计算
             if (t == reg->get_reg_output(curt_l->get_prev()[0]->get_base_id(), curt_layer_id) && is_checkpoint(curt_l->get_prev()[0])) {
                 continue;
             }
@@ -339,7 +344,7 @@ void recompute_t<value_type>::scan_recompute_free_tensor() {
         }
     }
 #ifdef DEBUG
-    printf("--------recompute free tensor------------\n");
+    printf("--------recompute free tensor------------\n");  //扫描出可以重算的tensor
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
         printf("layer %d:\n", layer_id);
         if (recompute_free_map[layer_id].empty()){
@@ -369,7 +374,7 @@ void recompute_t<value_type>::offload_to_recompute(int layer_id, net_comp dir, n
         tensor_t<value_type>* t = (tensor_t<value_type>*)offload_tensors[layer_id][i];
         if (stage == NET_TRAIN) {
             // set it RECOMPUTE, avoid data transfer
-            t->free_gpu_space(RECOMPUTE);
+            t->free_gpu_space(RECOMPUTE);   //将offload_tensors中的tensor释放并标记为重算
         } else {
             t->free_gpu_space(VOID);
         }
@@ -406,7 +411,7 @@ void recompute_t<value_type>::update_f_tensor(base_layer_t<value_type> *l, int c
     int curt_layer_id = l->get_base_id();
 
     // if curt segment does not exceed bottleneck, then skip
-    if (! seg_mems[curt_layer_id].second) {
+    if (! seg_mems[curt_layer_id].second) {//段长太大，就要重算
         return;
     }
 
@@ -414,14 +419,14 @@ void recompute_t<value_type>::update_f_tensor(base_layer_t<value_type> *l, int c
     return;
 #endif
 
-    for (size_t i = 0; i < recompute_free_map[curt_layer_id].size(); ++i) {
+    for (size_t i = 0; i < recompute_free_map[curt_layer_id].size(); ++i) { //为啥要用这个数组？
         tensor_t<value_type>* t = (tensor_t<value_type>*)recompute_free_map[curt_layer_id][i];
 
         if (is_backward_dependency(t, curt_recomputed_layer_id)) {
             continue;
         }
 
-        if (is_in_offload_list(t)) {
+        if (is_in_offload_list(t)) {//为啥俩数组都用了？
             t->free_gpu_space(RECOMPUTE);
         } else {
             t->free_gpu_space(VOID);

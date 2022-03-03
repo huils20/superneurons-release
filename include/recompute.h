@@ -88,7 +88,7 @@ private:
                 continue;
             }
             base_layer_t<value_type>* l = (base_layer_t<value_type>*)tmp->second;
-            if (! l->get_prev().empty()) {
+            if (! l->get_prev().empty()) {//判断当前层的输入是否要重算
                 tensor_t<value_type> *input_tensor = reg->get_reg_output(l->get_prev()[0]->get_base_id(), layer_id);
                 if (is_in_offload_list(input_tensor) && is_backward_dependency(input_tensor, layer_id)) {
                     should_recompute[layer_id] = true;  //在offload list且为反向依赖则需要recompute
@@ -96,7 +96,7 @@ private:
                 }
             }
 
-            if ( ! l->get_next().empty()) {
+            if ( ! l->get_next().empty()) {//判断当前层的输出是否要重算
                 tensor_t<value_type> *output_tensor = reg->get_reg_output(layer_id, l->get_next()[0]->get_base_id());
                 if (is_in_offload_list(output_tensor) && is_backward_dependency(output_tensor, layer_id)) {
                     should_recompute[layer_id] = true;
