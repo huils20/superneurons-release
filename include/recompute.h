@@ -118,7 +118,7 @@ private:
 
     void scan_recompute_free_tensor();
 
-    inline void init() {
+    inline void init() {//inline啥意思？？
         find_bottleneck();
         scan_checkpoint();
         scan_offload_tensors();

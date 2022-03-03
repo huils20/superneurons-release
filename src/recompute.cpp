@@ -264,7 +264,7 @@ void recompute_t<value_type>::scan_offload_tensors() {
         }
         if (!is_checkpoint(curt_layer)) {   //  curt不是ckp
             tensor_t<value_type>* in = reg->get_reg_output(curt_layer->get_prev()[0]->get_base_id(), curt_layer_id);    //  pre-curt的output
-            if (!is_checkpoint(curt_layer->get_prev()[0])) {    //  pre不是ckp，则将pre的output加入offload list
+            if (!is_checkpoint(curt_layer->get_prev()[0])) {    //  pre不是ckp，则将curt的输入加入offload list
                 offload_tensors[curt_layer_id].push_back((void *) in);
             }
         } else {    //curt是ckp
@@ -272,7 +272,7 @@ void recompute_t<value_type>::scan_offload_tensors() {
                 base_layer_t<value_type> *prev_layer = curt_layer->get_prev()[i];
 
                 if (prev_layer == NULL) continue;
-                if (prev_layer->get_layer_type() == DATA_L) {
+                if (prev_layer->get_layer_type() == DATA_L) {//为啥？数据层无运算
                     continue;
                 }
 
@@ -290,12 +290,12 @@ void recompute_t<value_type>::scan_offload_tensors() {
                 assert(t != NULL);
                 assert(t->get_type() == DATA);
 
-                offload_tensors[curt_layer_id].push_back((void *) t);   //  pre不是ckp，且...则将pre的output加入offload list
+                offload_tensors[curt_layer_id].push_back((void *) t);   //  pre不是ckp，且...则将curt的输入加入offload list
             }
         }
     }
 #ifdef DEBUG
-    printf("------offload tensors-----------\n");   //扫描出可释放的tensor
+    printf("------offload tensors-----------\n");   //添加本层的依赖tensor
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
         printf("layer %d: \n", layer_id);
         if (offload_tensors[layer_id].empty()) {
@@ -340,11 +340,11 @@ void recompute_t<value_type>::scan_recompute_free_tensor() {
             if (t == reg->get_reg_output(curt_l->get_prev()[0]->get_base_id(), curt_layer_id) && is_checkpoint(curt_l->get_prev()[0])) {
                 continue;
             }
-            recompute_free_map[curt_layer_id].push_back((void*)t);
+            recompute_free_map[curt_layer_id].push_back((void*)t);//添加本层的依赖tensor
         }
     }
 #ifdef DEBUG
-    printf("--------recompute free tensor------------\n");  //扫描出可以重算的tensor
+    printf("--------recompute free tensor------------\n");  
     for (int layer_id = 1; layer_id <= max_layer_id; ++layer_id) {
         printf("layer %d:\n", layer_id);
         if (recompute_free_map[layer_id].empty()){
@@ -400,7 +400,7 @@ void recompute_t<value_type>::stash_f_tensor(base_layer_t<value_type> *l) {
         if (t->get_type() == CONV_BUFF) {
             t->stash_gpu_space();
         } else {
-            t->CPUtoGPU();
+            t->CPUtoGPU();//data要回到gpu，copy
         }
 
     }
@@ -411,7 +411,7 @@ void recompute_t<value_type>::update_f_tensor(base_layer_t<value_type> *l, int c
     int curt_layer_id = l->get_base_id();
 
     // if curt segment does not exceed bottleneck, then skip
-    if (! seg_mems[curt_layer_id].second) {//段长太大，就要重算
+    if (! seg_mems[curt_layer_id].second) {//段长小，就待在gpu中，不free了
         return;
     }
 
@@ -427,7 +427,7 @@ void recompute_t<value_type>::update_f_tensor(base_layer_t<value_type> *l, int c
         }
 
         if (is_in_offload_list(t)) {//为啥俩数组都用了？
-            t->free_gpu_space(RECOMPUTE);
+            t->free_gpu_space(RECOMPUTE);//释放显存
         } else {
             t->free_gpu_space(VOID);
         }
